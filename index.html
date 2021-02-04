@@ -8,7 +8,7 @@
   <script src="./src/perlin.js"></script>
 </head>
 
-<body onload="gameStart()">
+<body onload="gameStart()" onkeydown="keydown(this, event)">
   <div id="app"></div>
   <canvas id="canvas" width="1600" height="900"></canvas>
   <div style="display:none;">

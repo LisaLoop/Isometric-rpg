@@ -21,7 +21,7 @@ declare var noise: any
  - viewport movement - arrow keys that change the position of the viewport so that you can
  see different places on the map. 
  - tile click - when the user clicks on the canvas we need to know what tile was clicked
- - randomly spawn factories, producer/consumsers, make tiles from the buildings
+ - randomly spawn factories, producer/consumers, make tiles from the buildings
  - randonly spawn trees
  - write a function that converts 0,1,2,3 to tile names 
  - clamp function to make code more readable
@@ -44,6 +44,10 @@ const perlinMap = function (value: number): number {
   }
 }
 
+const keydown = (body: HTMLBodyElement, event: Event ) => {
+  // event.keycode
+  // WASD
+}
 
 const render = () => {
   const grass = document.getElementById('grass') as HTMLImageElement;
@@ -67,30 +71,49 @@ const render = () => {
       levelData2D.push(rows);
     }
     return levelData2D
+  
   }
   const boardHeight = 64;
   const boardWidth = 64;
   const levelData2D = makeLevelData2D(boardHeight, boardWidth);
-
+  let centerX = boardWidth/2;
+  let centerY = boardHeight/2;
+  let viewportWidth = 5;
+  let viewportHeight = 5;
+  let startX = clamp(0, levelData2D.length-1, centerX - viewportWidth);
+  let endX = clamp(0, levelData2D.length-1, centerX + viewportWidth);
+  let startY = clamp(0, levelData2D[0].length-1, centerY - viewportHeight);
+  let endY = clamp(0, levelData2D[0].length-1, centerY + viewportHeight);
   const canvas = document.getElementById('canvas') as HTMLCanvasElement;
   const ctx = canvas.getContext('2d');
-  for (let i = 0; i < levelData2D.length; i++) {
-    for (let j = 0; j < levelData2D[i].length; j++) {
+  for (let i = startX; i <= endX; i++) {
+    for (let j = startY; j <= endY; j++) {
       const tile = levelData2D[i][j]; 
       const asset = tileType[tile]; 
       // console.log("tile: ", tile);
       // console.log("asset: ", asset);
       let xOffset = 800;
-      let yOffset = -432;
+      let yOffset = -1200;
       let cartX = i * 50;
       let cartY = j * 50;
       let isoX = cartX - cartY;
       let isoY = (cartX + cartY) / 2;
-      console.log("asset: ", asset);
+      // console.log("asset: ", asset);
       ctx.drawImage(asset, isoX + xOffset, isoY + yOffset)
     }
   }
 }
+const clamp = (min: number, max: number, value: number):number => {
+  // if((value >= min && value <= max)){return value}
+  if(value < min){return min}
+  if(value > max){return max}
+  return value
+}
+// console.log("1", clamp(1, 10, 5)) // 5
+// console.log("2", clamp(0, 1, -1)) // 0
+// console.log("3", clamp(0, 1, 2)) // 1
+
+
 const gameStart = () => {
   render();
 }
