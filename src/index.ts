@@ -19,6 +19,8 @@ declare var noise: any
 /*
  - TODO: 
  - Left goes left, right goes right
+
+
  - increase the map size to 512
  - change the x and y offsets so that the actual starting points of the map are outside of the screen 
  - tile click - when the user clicks on the canvas we need to know what tile was clicked and it needs to be
@@ -28,6 +30,53 @@ declare var noise: any
  - write a function that converts 0,1,2,3 to tile names 
 
  */
+
+
+/*
+Example:
+sPos - 1,1 
+Left - 0,2
+Right - 2,0
+Up - 0,0
+Down, 2,2
+
+left = (sPosX - 1, sPosY + 1)
+right = (sPosX + 1, sPosY -1)
+up = (sPosX -1 , sPosY -1)
+down = (sPosX + 1 , sPosY +1)
+*/
+enum Direction {
+  Up = 1,
+  Down = 2,
+  Left = 3,
+  Right = 4,
+}
+
+type Point = {
+  x: number,
+  y: number
+}
+// When the user uses the keyboard to navigate, they are navigating in screen 
+// space, however the render code requires a location in board space. 
+// This function maps, given an input coord, the new coord of the player 
+// after they press a key by changing the coords into 45deg rotated new 
+// co-ordinate space. 
+const mapCoords = (x: number, y: number, direction: Direction): Point => {
+  switch (direction) {
+    case Direction.Up:
+      return { x: x - 1, y: y - 1 } as Point
+    case Direction.Down:
+      return { x: x + 1, y: y + 1 } as Point
+    case Direction.Left:
+      return { x: x - 1, y: y + 1 } as Point
+    case Direction.Right:
+      return { x: x + 1, y: y - 1 } as Point
+    default:
+      throw new Error("Not a valid direction")
+  }
+}
+// console.log(mapCoords(1,1,Direction.Up));
+
 const perlinMap = function (value: number): number {
   if (value >= 0 && value < 80) {
     return 0 // water
@@ -48,33 +97,38 @@ const perlinMap = function (value: number): number {
 
 const BOARDHEIGHT = 64;
 const BOARDWIDTH = 64;
-const player = { x: BOARDWIDTH/2, y: BOARDHEIGHT/2 }
+const player = { x: BOARDWIDTH / 2, y: BOARDHEIGHT / 2 }
+
+const updatePosition = (point: Point) => {
+  player.x = clamp(5, BOARDWIDTH - 5 - 1, point.x);
+  player.y = clamp(5, BOARDHEIGHT - 5 - 1, point.y);
+}
 
 window.addEventListener("keydown", function (event) {
   if (event.defaultPrevented) {
     return; // Do nothing if event already handled
   }
-
+  let point;
   switch (event.code) {
     case "KeyS":
     case "ArrowDown":
-      // Handle "DOWN"
-      player.y = clamp(5, BOARDHEIGHT-5-1, player.y + 1);
+      point = mapCoords(player.x, player.y, Direction.Down);
+      updatePosition(point);
       break;
     case "KeyW":
     case "ArrowUp":
-      // Handle "UP"
-      player.y = clamp(5, BOARDHEIGHT-5-1, player.y - 1);
+      point = mapCoords(player.x, player.y, Direction.Up);
+      updatePosition(point);
       break;
     case "KeyA":
     case "ArrowLeft":
-      // Handle "turn left"
-      player.x = clamp(5, BOARDWIDTH-5-1, player.x - 1);
+      point = mapCoords(player.x, player.y, Direction.Left);
+      updatePosition(point)
       break;
     case "KeyD":
     case "ArrowRight":
-      // Handle "turn right"
-      player.x = clamp(5, BOARDWIDTH-5-1, player.x + 1);
+      point = mapCoords(player.x, player.y, Direction.Right);
+      updatePosition(point);
       break;
   }
 
@@ -139,7 +193,7 @@ const render = () => {
       const asset = tileType[tile];
       // console.log("tile: ", tile);
       // console.log("asset: ", asset);
-      let xOffset = (BOARDWIDTH/4) * 50;
+      let xOffset = (BOARDWIDTH / 4) * 50;
       let yOffset = 0;
       let cartX = screenI * 50;
       let cartY = screenJ * 50;
