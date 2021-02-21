@@ -1,4 +1,5 @@
 declare var noise: any
+import { Point } from './math'
 /*
   factory,
   farm,
@@ -18,13 +19,10 @@ declare var noise: any
 
 /*
  - TODO: 
- - Left goes left, right goes right
-
-
+  - tile click - when the user clicks on the canvas we need to know what tile was clicked and it needs to be
+  highlited. 
  - increase the map size to 512
  - change the x and y offsets so that the actual starting points of the map are outside of the screen 
- - tile click - when the user clicks on the canvas we need to know what tile was clicked and it needs to be
-  highlited. 
  - randomly spawn factories, producer/consumers, make tiles from the buildings
  - randonly spawn trees
  - write a function that converts 0,1,2,3 to tile names 
@@ -52,10 +50,6 @@ enum Direction {
   Right = 4,
 }
 
-type Point = {
-  x: number,
-  y: number
-}
 // When the user uses the keyboard to navigate, they are navigating in screen 
 // space, however the render code requires a location in board space. 
 // This function maps, given an input coord, the new coord of the player 
