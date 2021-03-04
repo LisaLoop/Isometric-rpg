@@ -1,8 +1,3 @@
-// TODO
-/*
-write radians2degrees, cartesian2polar
-*/
-
 export type Point = {
     x: number,
     y: number
@@ -19,8 +14,12 @@ export const distance = (a: Point, b: Point): number => {
     return distance
 }
 
-export const degrees2radians = (degree: number) => {
-    return (degree * Math.PI/180) 
+export const degrees2radians = (degree: number): number => {
+    return (degree * Math.PI/180)
+}
+
+export const radians2degrees = (radians: number): number => {
+ return (radians * 180/Math.PI)
 }
 //  (distance: 13, angle: 22.6°) 
 /*
@@ -32,4 +31,13 @@ export const polar2cartesian = (point: PolarPoint): Point => {
     const x = point.radius * Math.cos(point.angle);
     const y = point.radius * Math.sin(point.angle);
     return {x, y}
+}
+/*
+r = √ ( x2 + y2 )
+θ = tan-1 ( y / x )
+*/
+export const cartesian2polar = (cartesian: Point): PolarPoint => {
+    const angle = Math.atan(cartesian.y/cartesian.x);
+    const radius = Math.sqrt((cartesian.x**2) + (cartesian.y**2))
+    return {angle, radius}
 }

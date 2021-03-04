@@ -1,4 +1,4 @@
-import { distance, degrees2radians, polar2cartesian } from './math'
+import { distance, degrees2radians, polar2cartesian, radians2degrees,cartesian2polar } from './math'
 import { Point, PolarPoint } from './math'
 
 describe('#distance', () => {
@@ -41,5 +41,26 @@ describe('#polar2cartesian', () => {
         const polarPoint: PolarPoint = {radius: 1, angle: degrees2radians(45) }
         const output = polar2cartesian(polarPoint);
         expect((output.x-Math.sqrt(2)/2) + (output.y - Math.sqrt(2)/2)).toBeLessThan(epsilon)
+    })
+})
+
+describe('#radians2degrees', () => {
+    it('it converts radians to degrees', () => {
+        const radians = Math.PI * 2;
+        const output = 360;
+        const epsilon = 0.0000001;
+        expect(radians2degrees(radians) - output).toBeLessThan(epsilon)
+    })
+    it('it converts radians to degrees with other input', () => {
+        const radians = 0;
+        const output = 0;
+        expect(radians2degrees(radians) - output).toBe(0)
+    })
+})
+
+describe("#cartesian2polar", () => {
+    it("returns a polar point given some input as cartesian point", () => {
+        const cartPoint = {x: 10, y: 10 }
+        expect(cartesian2polar(cartPoint)).toBe({angle: radians2degrees(45),radius: Math.sqrt(200)})
     })
 })
