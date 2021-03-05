@@ -1,5 +1,5 @@
+<img width="300px" src="./roadTiles_v2/png/index.png"/>
 # Getting started 
-
 ## Dependencies 
 - This project works with 
 - NPM version 6.13.4
