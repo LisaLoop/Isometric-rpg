@@ -1,4 +1,4 @@
-![](/roadTiles_v2/png/index.png)
+![](roadTiles_v2/png/index.png)
 
 # Getting started 
 ## Dependencies 
