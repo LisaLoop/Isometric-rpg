@@ -15,7 +15,7 @@
  */
 
 (function(global){
-    var module = global.noise = {};
+    var module: any = global.noise = {};
   
     function Grad(x, y, z) {
       this.x = x; this.y = y; this.z = z;

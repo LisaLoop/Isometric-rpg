@@ -141,6 +141,17 @@ window.addEventListener("keydown", function (event) {
 // }
 
 // console.log("noise: ", noise);
+const selectTile = (e: MouseEvent) => {
+  console.log("e.x: ", e.clientX, "e.y: ", e.clientY);
+  console.log("e: ", e);
+  // return {x: e.clientX, y: e.clientY}
+}
+/** */
+const setupCanvasHandlers = () => {
+  const canvas = document.getElementById('canvas') as HTMLCanvasElement;
+  canvas.addEventListener("click", selectTile);
+
+}
 
 const render = () => {
   const grass = document.getElementById('grass') as HTMLImageElement;
@@ -209,10 +220,17 @@ const clamp = (min: number, max: number, value: number): number => {
 
 
 const gameStart = () => {
+  // improve name of this function
+  setupCanvasHandlers();
   const seed = Math.random();
   noise.seed(seed);
   render();
 }
+// console.log("document.readyState: ", document.readyState);
+
+window.addEventListener("load", function(){
+  gameStart();
+});
 
 
 // class Node {
