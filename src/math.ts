@@ -24,6 +24,9 @@ Sy <- x * th/2 + y * th/2
 Sx <- (x - y) * tw/2
 Sy <- (x + y) * th/2
 
+by = sy/th - sx/tw
+bx = (th*sx + sy rw)/(th tw)
+
 screen space: 1600 / 900; // canvas size
 camera space: 512 /480; // window into iso grid space
 world space: 64 x 64 // board size 
@@ -46,15 +49,16 @@ sy = (x + y) * C
 x + y = sy/C 
 y = sy/C - x
 
-(screen.x - screen.y) * tileWidth / 2;
-
+bx = (th*sx + sy rw)/(th tw)
+by = sy/th - sx/tw
 */
-// export const screenSpaceToBoardSpace = (board: Point): Point => {
-//     const tileWidth = getTileWidth();
-//     const tileHeight = getTileHeight();
-//     // const bx = 
-//     // const by;
-// }
+export const screenSpaceToBoardSpace = (screen: Point): Point => {
+    const tileWidth = getTileWidth();
+    const tileHeight = getTileHeight();
+    const boardX = (tileHeight * screen.x + screen.y * tileWidth)/(tileHeight * tileWidth);
+    const boardY = screen.y/tileHeight - screen.x/tileWidth;
+    return {x: boardX, y: boardY}
+}
 
 
 
