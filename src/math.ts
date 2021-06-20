@@ -9,14 +9,14 @@ export type PolarPoint = {
 }
 
 const tileWidth = 50;
-const getTileWidth = () => {
-    return tileWidth
-}
+// const getTileWidth = () => {
+//     return tileWidth
+// }
 
 const tileHeight = 25; 
-const getTileHeight = () => {
-    return tileHeight
-}
+// const getTileHeight = () => {
+//     return tileHeight
+// }
 /*
 Sx <- x * tw/2 - y * tw/2 
 Sy <- x * th/2 + y * th/2
@@ -32,36 +32,24 @@ camera space: 512 /480; // window into iso grid space
 world space: 64 x 64 // board size 
 
 https://youtu.be/ukkbNKTgf5U?t=161
+
+
 */
-export const boardSpaceToScreenSpace = (board: Point): Point => {
-    const tileWidth = getTileWidth();
-    const tileHeight = getTileHeight();
-    const screenX = (board.x - board.y) * tileWidth / 2;
-    const screenY = (board.x + board.y) * tileHeight / 2;
+export const boardSpaceToScreenSpace = (board: Point, scrollPosition: Point, scale: Point): Point => {
+    const tileWidth = scale.x;
+    const tileHeight = scale.y;
+    const screenX = ((board.x - board.y) * tileWidth / 2) + scrollPosition.x;
+    const screenY = ((board.x + board.y) * tileHeight / 2) + scrollPosition.y;
     return {x: screenX, y: screenY}
 }
 
-
-/*
-sy = (x + y) * C
-
-(x + y) * C = sy
-x + y = sy/C 
-y = sy/C - x
-
-bx = (th*sx + sy rw)/(th tw)
-by = sy/th - sx/tw
-*/
-export const screenSpaceToBoardSpace = (screen: Point): Point => {
-    const tileWidth = getTileWidth();
-    const tileHeight = getTileHeight();
-    const boardX = (tileHeight * screen.x + screen.y * tileWidth)/(tileHeight * tileWidth);
-    const boardY = screen.y/tileHeight - screen.x/tileWidth;
+export const screenSpaceToBoardSpace = (screen: Point, scrollPosition: Point, scale: Point): Point => {
+    const tileWidth = scale.x;
+    const tileHeight = scale.y;
+    const boardX = ((tileHeight * screen.x + screen.y * tileWidth)/(tileHeight * tileWidth)) - scrollPosition.x;
+    const boardY = (screen.y/tileHeight - screen.x/tileWidth) - scrollPosition.y;
     return {x: boardX, y: boardY}
 }
-
-
-
 
 export const distance = (a: Point, b: Point): number => {
     const distance = Math.sqrt(((a.x - b.x)*(a.x - b.x)) + ((a.y - b.y)*(a.y - b.y)))
@@ -91,7 +79,7 @@ r = √ ( x2 + y2 )
 θ = tan-1 ( y / x )
 */
 export const cartesian2polar = (cartesian: Point): PolarPoint => {
-    const angle = Math.atan(cartesian.y/cartesian.x);
     const radius = Math.sqrt((cartesian.x**2) + (cartesian.y**2))
+    const angle = Math.atan(cartesian.y/cartesian.x);
     return {angle, radius}
 }
