@@ -1,1 +1,4 @@
 node_modules
+build/*
+.DS_Store
+roadTiles_v2/.DS_Store
