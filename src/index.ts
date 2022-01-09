@@ -1,24 +1,9 @@
 declare var noise: any
-import { Point } from './math'
-/*
-  factory,
-  farm,
-  coal mine
-  electric station,
-  power plant
-
-{
-  type:factory,
-  x: 0,
-  y: 0,
-  produce: true, 
-  consume: true,
-}
-
-*/
+import { boardSpaceToScreenSpace, Point } from './math'
 
 /*
  - TODO: 
+  - draw currently selected tile
   - tile click - when the user clicks on the canvas we need to know what tile was clicked and it needs to be
   highlited. 
  - increase the map size to 512
@@ -132,18 +117,33 @@ window.addEventListener("keydown", function (event) {
   event.preventDefault();
 }, true);
 
+var drawLine = function (ctx: CanvasRenderingContext2D, x1: number, y1: number, x2: number, y2: number) {
+  ctx.beginPath(); // Start a new path
+  ctx.moveTo(x1, y1); // Move the pen to (30, 50) 
+  ctx.lineTo(x2, y2); // Draw a line to (150, 100)
+  ctx.lineWidth = 0.1;
+  ctx.stroke(); // Render the path
+};
 
-
-// const keydown = (body: HTMLBodyElement, event: Event ) => {
-
-//   // event.keycode
-//   // WASD
-// }
-
+const drawLineWithPoints = (ctx: CanvasRenderingContext2D, p1: Point, p2: Point) => {
+  drawLine(ctx, p1.x, p1.y, p2.x, p2.y);
+}
 // console.log("noise: ", noise);
 const selectTile = (e: MouseEvent) => {
   console.log("e.x: ", e.clientX, "e.y: ", e.clientY);
-  console.log("e: ", e);
+  // console.log("e: ", e);
+  // a,b,c,d are four points we're drawing on the screen
+  // they represent the corners of the currently selected tile
+  let a = boardSpaceToScreenSpace({x: 0, y: 0}, {x: 0, y: 0}, {x:1,y:1});
+  let b = boardSpaceToScreenSpace({x: 0, y: 1}, {x: 0, y: 0}, {x:1,y:1});
+  let c = boardSpaceToScreenSpace({x: 1, y: 1}, {x: 0, y: 0}, {x:1,y:1});
+  let d = boardSpaceToScreenSpace({x: 1, y: 0}, {x: 0, y: 0}, {x:1,y:1});
+  const ctx = getContext();
+  console.log(a, b, c, d);
+  drawLineWithPoints(ctx, a, b);
+  drawLineWithPoints(ctx, b, c);
+  drawLineWithPoints(ctx, c, d);
+  drawLineWithPoints(ctx, d, a);
   // return {x: e.clientX, y: e.clientY}
 }
 /** */
@@ -152,7 +152,15 @@ const setupCanvasHandlers = () => {
   canvas.addEventListener("click", selectTile);
 
 }
-
+const getContext = (): CanvasRenderingContext2D => {
+  const canvas = document.getElementById('canvas') as HTMLCanvasElement;
+  const ctx = canvas.getContext('2d');
+  return ctx;
+}
+const getCanvas = () => {
+  const canvas = document.getElementById('canvas') as HTMLCanvasElement;
+  return canvas;
+}
 const render = () => {
   const grass = document.getElementById('grass') as HTMLImageElement;
   const water = document.getElementById('water') as HTMLImageElement;
@@ -188,6 +196,8 @@ const render = () => {
   let endY = clamp(0, levelData2D[0].length - 1, centerY + viewportHeight);
   const canvas = document.getElementById('canvas') as HTMLCanvasElement;
   const ctx = canvas.getContext('2d');
+  // const canvas = getCanvas();
+  // const ctx = getContext();
   // TODO - make it suck less by only drawing a rhombus around the area drawn 
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   let screenI = 0;
