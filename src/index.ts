@@ -121,25 +121,25 @@ var drawLine = function (ctx: CanvasRenderingContext2D, x1: number, y1: number, 
   ctx.beginPath(); // Start a new path
   ctx.moveTo(x1, y1); // Move the pen to (30, 50) 
   ctx.lineTo(x2, y2); // Draw a line to (150, 100)
-  ctx.lineWidth = 0.1;
+  ctx.lineWidth = 2;
+  ctx.strokeStyle = 'blue';
   ctx.stroke(); // Render the path
 };
 
 const drawLineWithPoints = (ctx: CanvasRenderingContext2D, p1: Point, p2: Point) => {
   drawLine(ctx, p1.x, p1.y, p2.x, p2.y);
 }
-// console.log("noise: ", noise);
+
 const selectTile = (e: MouseEvent) => {
   console.log("e.x: ", e.clientX, "e.y: ", e.clientY);
-  // console.log("e: ", e);
   // a,b,c,d are four points we're drawing on the screen
   // they represent the corners of the currently selected tile
-  let a = boardSpaceToScreenSpace({x: 0, y: 0}, {x: 0, y: 0}, {x:1,y:1});
-  let b = boardSpaceToScreenSpace({x: 0, y: 1}, {x: 0, y: 0}, {x:1,y:1});
-  let c = boardSpaceToScreenSpace({x: 1, y: 1}, {x: 0, y: 0}, {x:1,y:1});
-  let d = boardSpaceToScreenSpace({x: 1, y: 0}, {x: 0, y: 0}, {x:1,y:1});
+  let a = boardSpaceToScreenSpace({x: 0, y: 0}, {x: 0, y: 0}, {x:50,y:25});
+  let b = boardSpaceToScreenSpace({x: 0, y: 1}, {x: 0, y: 0}, {x:50,y:25});
+  let c = boardSpaceToScreenSpace({x: 1, y: 1}, {x: 0, y: 0}, {x:50,y:25});
+  let d = boardSpaceToScreenSpace({x: 1, y: 0}, {x: 0, y: 0}, {x:50,y:25});
   const ctx = getContext();
-  console.log(a, b, c, d);
+  // console.log(a, b, c, d);
   drawLineWithPoints(ctx, a, b);
   drawLineWithPoints(ctx, b, c);
   drawLineWithPoints(ctx, c, d);

@@ -38,8 +38,10 @@ https://youtu.be/ukkbNKTgf5U?t=161
 export const boardSpaceToScreenSpace = (board: Point, scrollPosition: Point, scale: Point): Point => {
     const tileWidth = scale.x;
     const tileHeight = scale.y;
-    const screenX = ((board.x - board.y) * tileWidth / 2) + scrollPosition.x;
-    const screenY = ((board.x + board.y) * tileHeight / 2) + scrollPosition.y;
+    const xOffset = (64 / 4) * 50 + tileWidth;
+    const yOffset = 0;
+    const screenX = ((board.x - board.y) * tileWidth) + scrollPosition.x + xOffset;
+    const screenY = ((board.x + board.y) * tileHeight) + scrollPosition.y + yOffset;
     return {x: screenX, y: screenY}
 }
 
