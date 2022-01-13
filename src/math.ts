@@ -48,8 +48,12 @@ export const boardSpaceToScreenSpace = (board: Point, scrollPosition: Point, sca
 export const screenSpaceToBoardSpace = (screen: Point, scrollPosition: Point, scale: Point): Point => {
     const tileWidth = scale.x;
     const tileHeight = scale.y;
-    const boardX = ((tileHeight * screen.x + screen.y * tileWidth)/(tileHeight * tileWidth)) - scrollPosition.x;
-    const boardY = (screen.y/tileHeight - screen.x/tileWidth) - scrollPosition.y;
+    // amount of tiles which are visible
+    const boardSize = 8;
+    // canvas offset in pixels
+    const canvasOffset = 8;
+    const boardX = ((tileHeight * (screen.x - 0) + (screen.y - canvasOffset) * tileWidth)/(tileHeight * tileWidth))/2 - 9 - scrollPosition.x;
+    const boardY = ((screen.y - canvasOffset)/tileHeight - (screen.x - 0)/tileWidth)/2 - scrollPosition.y + boardSize;
     return {x: boardX, y: boardY}
 }
 

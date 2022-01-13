@@ -1,5 +1,5 @@
 declare var noise: any
-import { boardSpaceToScreenSpace, Point } from './math'
+import { boardSpaceToScreenSpace, Point, screenSpaceToBoardSpace } from './math'
 
 /*
  - TODO: 
@@ -134,10 +134,16 @@ const selectTile = (e: MouseEvent) => {
   console.log("e.x: ", e.clientX, "e.y: ", e.clientY);
   // a,b,c,d are four points we're drawing on the screen
   // they represent the corners of the currently selected tile
-  let a = boardSpaceToScreenSpace({x: 0, y: 0}, {x: 0, y: 0}, {x:50,y:25});
-  let b = boardSpaceToScreenSpace({x: 0, y: 1}, {x: 0, y: 0}, {x:50,y:25});
-  let c = boardSpaceToScreenSpace({x: 1, y: 1}, {x: 0, y: 0}, {x:50,y:25});
-  let d = boardSpaceToScreenSpace({x: 1, y: 0}, {x: 0, y: 0}, {x:50,y:25});
+  // screenSpaceToBoardSpace = (screen: Point, scrollPosition: Point, scale: Point): Point => {
+  let tile = screenSpaceToBoardSpace({x: e.clientX, y: e.clientY}, {x:0, y:0}, {x:50,y:25});
+  const tX = Math.round(tile.x);
+  const tY = Math.round(tile.y);
+  console.log("tX: ", tX, " tY: ", tY);
+  console.log("tile.x: ", tile.x, " tile.y: ", tile.y);
+  let a = boardSpaceToScreenSpace({x: 0+tX, y: 0+tY}, {x: 0, y: 0}, {x:50,y:25});
+  let b = boardSpaceToScreenSpace({x: 0+tX, y: 1+tY}, {x: 0, y: 0}, {x:50,y:25});
+  let c = boardSpaceToScreenSpace({x: 1+tX, y: 1+tY}, {x: 0, y: 0}, {x:50,y:25});
+  let d = boardSpaceToScreenSpace({x: 1+tX, y: 0+tY}, {x: 0, y: 0}, {x:50,y:25});
   const ctx = getContext();
   // console.log(a, b, c, d);
   drawLineWithPoints(ctx, a, b);
